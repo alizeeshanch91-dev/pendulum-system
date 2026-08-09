@@ -2,14 +2,15 @@
 #include "raylib.h"
 #include <cmath>
 #include <iostream>
-Pendulum::Pendulum(Arm arm1, Arm arm2, double pivotX, double pivotY)
+
+Pendulum::Pendulum(Arm arm1, Arm arm2, double pivotX, double pivotY, Color armColor)
 {
 	this->arm1 = arm1;
 	this->arm2 = arm2;
 	this->pivotX = pivotX;
 	this->pivotY = pivotY;
+	this->armColor = armColor;
 }
-
 Pendulum::Pendulum()
 {
 	arm1.angle = 1.57;
@@ -18,6 +19,7 @@ Pendulum::Pendulum()
 	arm2.angularvelocity = 0;
 	pivotX = 0;
 	pivotY = 0;
+	armColor = RED;
 }
 Arm Pendulum::getArm2()
 {
@@ -73,7 +75,7 @@ void Pendulum::update(double dt,double gravity)
 	arm1.angle += arm1.angularvelocity * dt;
 	arm2.angle += arm2.angularvelocity * dt;
 }
-void Pendulum::draw()
+void Pendulum::draw(int textX)
 {
 	double L1 = arm1.getLength();
 	double L2 = arm2.getLength();
@@ -83,8 +85,13 @@ void Pendulum::draw()
 	double bob1Y = pivotY + L1 * cos(theta1);
 	double bob2X = bob1X + L2 * sin(theta2);
 	double bob2Y = bob1Y + L2 * cos(theta2);
-	DrawLine((int)pivotX, (int)pivotY, (int)bob1X, (int)bob1Y, WHITE);
-	DrawLine((int)bob1X, (int)bob1Y, (int)bob2X, (int)bob2Y, WHITE);
-	DrawCircle((int)bob1X, (int)bob1Y, 10, RED);
-	DrawCircle((int)bob2X, (int)bob2Y, 10, BLUE);
+	DrawLine((int)pivotX, (int)pivotY, (int)bob1X, (int)bob1Y, armColor);
+	DrawLine((int)bob1X, (int)bob1Y, (int)bob2X, (int)bob2Y, armColor);
+	DrawCircle((int)pivotX, (int)pivotY,10,RED);
+	DrawCircle((int)bob1X, (int)bob1Y, 10, armColor);
+	DrawCircle((int)bob2X, (int)bob2Y, 10, armColor);
+	DrawText(TextFormat("Current angle: %.2f", arm1.angle), textX, 500, 20, armColor);
+	DrawText(TextFormat("Angular velocity: %.2f", arm1.angularvelocity), textX, 535, 20, armColor);
+	// text is obtained from TextFormat("label: %.2f", value)
+	//DrawText(text, x, y, fontSize, color)
 }
