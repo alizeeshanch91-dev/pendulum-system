@@ -15,6 +15,6 @@ public:
 	Arm getArm1();
 	double getPivotX();
 	double getPivotY();
-	void update();
+	void update(double dt, double gravity);
 	void draw();
 };
