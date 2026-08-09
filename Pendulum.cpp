@@ -1,6 +1,7 @@
 #include "Pendulum.h"
+#include "raylib.h"
 #include <cmath>
-
+#include <iostream>
 Pendulum::Pendulum(Arm arm1, Arm arm2, double pivotX, double pivotY)
 {
 	this->arm1 = arm1;
@@ -74,4 +75,16 @@ void Pendulum::update(double dt,double gravity)
 }
 void Pendulum::draw()
 {
+	double L1 = arm1.getLength();
+	double L2 = arm2.getLength();
+	double theta1 = arm1.angle;
+	double theta2 = arm2.angle;
+	double bob1X = pivotX + L1 * sin(theta1);
+	double bob1Y = pivotY + L1 * cos(theta1);
+	double bob2X = bob1X + L2 * sin(theta2);
+	double bob2Y = bob1Y + L2 * cos(theta2);
+	DrawLine((int)pivotX, (int)pivotY, (int)bob1X, (int)bob1Y, WHITE);
+	DrawLine((int)bob1X, (int)bob1Y, (int)bob2X, (int)bob2Y, WHITE);
+	DrawCircle((int)bob1X, (int)bob1Y, 10, RED);
+	DrawCircle((int)bob2X, (int)bob2Y, 10, BLUE);
 }
